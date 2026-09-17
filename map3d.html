@@ -1,0 +1,314 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>遗址分布 - "浙"里在行动</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/leaflet.min.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-badge" src="images/team-badge.png" alt="团队团徽" />
+        <span class="brand-name">"浙"里在行动</span>
+      </a>
+      <nav class="main-nav">
+        <a href="resources.html">红色地图</a>
+        <a href="index.html">首页</a>
+        <a href="map3d.html" class="active">遗址分布</a>
+        <a href="achievements.html">革命历程</a>
+        <a href="about.html">关于</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-banner">
+      <div class="container">
+        <h1>遗址分布</h1>
+        <p>追寻平阳大地上的红色印记</p>
+      </div>
+    </section>
+
+    <!-- 红色点位总览 -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">红色点位总览</h2>
+        <p class="section-lead">集中展示平阳（山门、凤卧等）红色资源的空间分布，点击左侧地图上的点位查看详情</p>
+        <div class="map-frame site-map">
+          <div class="site-map-left">
+            <div id="spot-map"></div>
+          </div>
+          <aside class="site-map-right" id="spot-panel">
+            <div class="spot-panel-tip" id="spot-panel-tip">点击左侧点位，查看详细介绍</div>
+            <h3 class="spot-panel-name" id="spot-panel-name">—</h3>
+            <div class="spot-panel-meta" id="spot-panel-meta"></div>
+            <div class="spot-address" id="spot-panel-address"></div>
+            <p class="spot-panel-desc" id="spot-panel-desc"></p>
+          </aside>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-item"><b>10</b><span>重点红色点位</span></div>
+          <div class="stat-item"><b>2</b><span>涉及乡镇</span></div>
+          <div class="stat-item"><b>5</b><span>纪念场馆</span></div>
+          <div class="stat-item"><b>5</b><span>革命旧址</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 重点红色点位 -->
+    <section class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">重点红色点位</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3 class="card-title">中共浙江省一大纪念园</h3>
+            <p class="card-text">位于平阳凤卧，1939 年中共浙江省第一次代表大会旧址</p>
+          </article>
+          <article class="card">
+            <h3 class="card-title">红军挺进师纪念园</h3>
+            <p class="card-text">位于平阳山门，纪念中国工农红军挺进师的光辉历程</p>
+          </article>
+          <article class="card">
+            <h3 class="card-title">闽浙边抗日救亡干部学校</h3>
+            <p class="card-text">抗战时期培养革命干部的学校旧址</p>
+          </article>
+          <article class="card">
+            <h3 class="card-title">红军古道</h3>
+            <p class="card-text">山门镇至凤卧镇的红军行军古道，串联挺进师纪念园、大屯村、省一大纪念园等红色地标。</p>
+          </article>
+          <article class="card">
+            <h3 class="card-title">林心平纪念馆</h3>
+            <p class="card-text">林心平烈士陈列馆，2024年12月开馆，分“浙南菁英”“抗大英才”“长滆女杰”三个展厅。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><span class="footer-brand">"浙"里在行动</span> · 平阳山门红色社会实践成果展示</p>
+      <p>© 2026 社会实践团队 版权所有</p>
+    </div>
+  </footer>
+
+  <script src="js/leaflet.min.js"></script>
+  <script>
+    // ================================================================
+    //  平阳红色点位数据
+    // ================================================================
+    var redSpots = [{
+      id: 'spot1',
+      name: '中共浙江省一大纪念园（冠尖会址）',
+      category: '纪念场馆',
+      level: '全国红色旅游经典景区 · 国家级',
+      address: '浙江省温州市平阳县凤卧镇凤林村冠尖山',
+      lng: 120.3592,
+      lat: 27.6707,
+      desc: '1939年7月21日至30日，中共浙江省第一次代表大会在此召开。园区包括冠尖会址、省一大陈列馆、入党宣誓墙等。'
+    }, {
+      id: 'spot2',
+      name: '中共浙江省一大马头岗会址',
+      category: '革命旧址',
+      level: '省级文物保护单位',
+      address: '浙江省温州市平阳县凤卧镇马头岗村',
+      lng: 120.3624,
+      lat: 27.6682,
+      desc: '省一大另一重要会址，与冠尖会址共同构成省一大旧址群。'
+    }, {
+      id: 'spot3',
+      name: '中国工农红军挺进师纪念园',
+      category: '纪念场馆',
+      level: '全国红色旅游经典景区',
+      address: '浙江省温州市平阳县山门镇凤岭山',
+      lng: 120.3208,
+      lat: 27.6510,
+      desc: '1938年3月粟裕率军出征北上抗日之地。包含浮雕墙、出征门、纪念碑、陈列馆等。'
+    }, {
+      id: 'spot4',
+      name: '林心平烈士陈列馆',
+      category: '纪念场馆',
+      level: '县级爱国主义教育基地',
+      address: '浙江省温州市平阳县山门镇西山村',
+      lng: 120.3183,
+      lat: 27.6552,
+      desc: '2024年12月开馆，分"浙南菁英""抗大英才""长滆女杰"三个展厅。林心平列入第一批300名著名抗日英烈名录。'
+    }, {
+      id: 'spot5',
+      name: '闽浙边抗日救亡干部学校旧址',
+      category: '革命旧址',
+      level: '省级文物保护单位',
+      address: '浙江省温州市平阳县山门镇',
+      lng: 120.3202,
+      lat: 27.6515,
+      desc: '1938年刘英、粟裕创办的"抗大"式干部学校。'
+    }, {
+      id: 'spot6',
+      name: '中共闽浙边临时省委驻地（大屯村）',
+      category: '革命旧址',
+      level: '省级文物保护单位',
+      address: '浙江省温州市平阳县山门镇大屯村',
+      lng: 120.3254,
+      lat: 27.6603,
+      desc: '有"浙南红都"之称，闽浙边临时省委重要驻地。'
+    }, {
+      id: 'spot7',
+      name: '郑明德纪念馆',
+      category: '纪念场馆',
+      level: '县级文物保护单位',
+      address: '浙江省温州市平阳县凤卧镇',
+      lng: 120.3553,
+      lat: 27.6653,
+      desc: '纪念"浙南刘胡兰"——郑明德烈士。'
+    }, {
+      id: 'spot8',
+      name: '郑海啸故居',
+      category: '革命旧址',
+      level: '县级文物保护单位',
+      address: '浙江省温州市平阳县凤卧镇',
+      lng: 120.3563,
+      lat: 27.6673,
+      desc: '省一大相关红色地标，革命先辈郑海啸出生地。'
+    }, {
+      id: 'spot9',
+      name: '北上抗日出征门',
+      category: '革命旧址',
+      level: '全国红色旅游经典景区组成部分',
+      address: '浙江省温州市平阳县山门镇凤岭山（挺进师纪念园内）',
+      lng: 120.3208,
+      lat: 27.6510,
+      desc: '挺进师纪念园核心景观，粟裕率军出征北上抗日的历史见证。'
+    }, {
+      id: 'spot10',
+      name: '浙江红村研学营地',
+      category: '纪念场馆',
+      level: '红色教育基地',
+      address: '浙江省温州市平阳县凤卧镇',
+      lng: 120.3604,
+      lat: 27.6722,
+      desc: '浙南地区规模最大的红色研学基地。'
+    }];
+
+    // 红军古道 路径点
+    var trailPoints = [
+      [27.6510, 120.3208],
+      [27.6552, 120.3183],
+      [27.6575, 120.3220],
+      [27.6603, 120.3254],
+      [27.6630, 120.3350],
+      [27.6650, 120.3450],
+      [27.6653, 120.3553],
+      [27.6673, 120.3563],
+      [27.6707, 120.3592]
+    ];
+
+    // ================================================================
+    //  初始化地图（固定视野：不提供缩放与拖动）
+    // ================================================================
+    var map = L.map('spot-map', {
+      center: [27.662, 120.338],
+      zoom: 13,
+      zoomControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      touchZoom: false,
+      keyboard: false
+    });
+
+    L.tileLayer('http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>'
+    }).addTo(map);
+
+    // ================================================================
+    //  右侧介绍面板
+    // ================================================================
+    function showSpot(spot) {
+      var meta = '<span class="spot-tag">' + spot.category + '</span>';
+      if (spot.level) {
+        meta += '<span class="spot-tag">' + spot.level + '</span>';
+      }
+      document.getElementById('spot-panel-tip').textContent = '点位详情';
+      document.getElementById('spot-panel-name').textContent = spot.name;
+      document.getElementById('spot-panel-meta').innerHTML = meta;
+      document.getElementById('spot-panel-address').textContent = spot.address;
+      document.getElementById('spot-panel-desc').textContent = spot.desc;
+    }
+
+    function showTrail() {
+      document.getElementById('spot-panel-tip').textContent = '红色线路';
+      document.getElementById('spot-panel-name').textContent = '红军古道（山门 → 凤卧）';
+      document.getElementById('spot-panel-meta').innerHTML = '<span class="spot-tag">红色线路</span>';
+      document.getElementById('spot-panel-address').textContent = '浙江省温州市平阳县山门镇至凤卧镇';
+      document.getElementById('spot-panel-desc').textContent = '山门镇 → 凤卧镇，全长约13-14公里，串联挺进师纪念园、大屯村、省一大纪念园等多个红色地标，是当年红军挺进师行军的重要路线。';
+    }
+
+    // ================================================================
+    //  绘制红军古道
+    // ================================================================
+    var polyline = L.polyline(trailPoints, {
+      color: '#e67e22',
+      weight: 5,
+      dashArray: '12, 10',
+      opacity: 0.9
+    }).addTo(map);
+    polyline.on('click', showTrail);
+
+    L.circleMarker(trailPoints[0], { radius: 8, color: '#e67e22', fillColor: '#e67e22', fillOpacity: 1 })
+      .addTo(map)
+      .on('click', showTrail);
+    L.circleMarker(trailPoints[trailPoints.length - 1], { radius: 8, color: '#e67e22', fillColor: '#e67e22', fillOpacity: 1 })
+      .addTo(map)
+      .on('click', showTrail);
+
+    // ================================================================
+    //  红色点位标记
+    // ================================================================
+    function createIcon(type) {
+      var html = '';
+      if (type === 'flag') {
+        html = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="34" height="34">' +
+          '<path d="M6 4v24h3V18h18l-4-6l4-6H9V4z" fill="#c0272d" stroke="#fff" stroke-width="1.5"/>' +
+          '<circle cx="10" cy="10" r="3" fill="#f6d98f"/></svg>';
+      } else {
+        html = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="34" height="34">' +
+          '<path d="M16 4l3.5 9.5L29 14.5l-7 7l2 10.5L16 27.5 8 32l2-10.5l-7-7l9.5-1L16 4z" fill="#c0272d" stroke="#fff" stroke-width="1.5"/>' +
+          '<circle cx="16" cy="16" r="3" fill="#f6d98f"/></svg>';
+      }
+      return L.divIcon({
+        html: html,
+        iconSize: [34, 34],
+        iconAnchor: [17, 34],
+        popupAnchor: [0, -28],
+        className: ''
+      });
+    }
+
+    redSpots.forEach(function(spot) {
+      var iconType = (spot.category === '纪念场馆') ? 'flag' : 'star';
+      var marker = L.marker([spot.lat, spot.lng], {
+        icon: createIcon(iconType),
+        title: spot.name,
+        riseOnHover: true
+      }).addTo(map);
+      marker.on('click', function() {
+        showSpot(spot);
+      });
+    });
+
+    // ================================================================
+    //  固定视野：自动框选全部点位
+    // ================================================================
+    var allCoords = trailPoints.concat(redSpots.map(function(s) { return [s.lat, s.lng]; }));
+    map.fitBounds(L.latLngBounds(allCoords), { padding: [40, 40] });
+
+    showSpot(redSpots[0]);
+  </script>
+</body>
+</html>

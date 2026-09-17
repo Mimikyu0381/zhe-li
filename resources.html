@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>红色地图 - "浙"里在行动</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/leaflet.min.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-badge" src="images/team-badge.png" alt="团队团徽" />
+        <span class="brand-name">"浙"里在行动</span>
+      </a>
+      <nav class="main-nav">
+        <a href="resources.html" class="active">红色地图</a>
+        <a href="index.html">首页</a>
+        <a href="map3d.html">遗址分布</a>
+        <a href="achievements.html">革命历程</a>
+        <a href="about.html">关于</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-banner">
+      <div class="container">
+        <h1>红色地图</h1>
+        <p>沉浸式体验平阳革命遗址</p>
+      </div>
+    </section>
+
+    <!-- 3D 遗址展示：五处遗址同处一园，可漫游 -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">3D 遗址展示</h2>
+        <p class="section-lead">
+          点击「红色地图」进入漫游模式：W A S D 行走、移动鼠标转动视角、准星对准遗址后按 F 查看介绍，右下角可全屏。
+        </p>
+
+        <div class="viewer3d" id="viewer3d">
+          <div id="scene3d"></div>
+
+          <!-- 展示模式：全景巡回 -->
+          <div class="viewer3d-card">
+            <h3 id="v3d-name">3D 遗址展示</h3>
+            <p id="v3d-meta"></p>
+            <p id="v3d-desc"></p>
+          </div>
+          <div class="viewer3d-note" id="v3d-note"></div>
+          <div class="viewer3d-hint" id="v3d-hint">左键拖动环绕 · 滚轮缩放 · 点击下方标签聚焦单体 · 点击「红色地图」开始漫游</div>
+
+          <!-- 漫游模式 HUD -->
+          <div class="w3d-hud" id="w3d-hud">
+            <div class="w3d-crosshair" id="w3d-crosshair"><i></i><i></i><i></i><i></i><span></span></div>
+            <div class="w3d-hint" id="w3d-hint"></div>
+
+            <aside class="w3d-info" id="w3d-info">
+              <button class="w3d-info-close" id="w3d-info-close" type="button" aria-label="关闭介绍">×</button>
+              <h3 id="w3d-info-name"></h3>
+              <p class="w3d-info-meta" id="w3d-info-meta"></p>
+              <p class="w3d-info-desc" id="w3d-info-desc"></p>
+              <p class="w3d-info-note" id="w3d-info-note"></p>
+            </aside>
+
+            <canvas class="w3d-map" id="w3d-map" width="160" height="160"></canvas>
+
+            <div class="w3d-keys">W A S D 行走 · Shift 奔跑 · 空格 跳跃 · 移动鼠标 转视角 · F 查看介绍 · E 切换全屏</div>
+            <button class="w3d-fs" id="w3d-fs" type="button" title="按 E 可切换全屏">全屏浏览（E）</button>
+
+            <div class="w3d-pause" id="w3d-pause">
+              <div class="w3d-pause-card">
+                <h3>已暂停</h3>
+                <p>鼠标已解锁，点击「继续浏览」回到遗址公园</p>
+                <button class="w3d-btn primary" id="w3d-resume" type="button">继续浏览</button>
+                <button class="w3d-btn" id="w3d-exit" type="button">退出浏览</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 开始浏览：点击红色地图 -->
+          <div class="w3d-start" id="w3d-start">
+            <div class="w3d-start-card">
+              <h3>红色地图</h3>
+              <button class="w3d-start-map" id="w3d-start-map" type="button" aria-label="点击红色地图">
+                <svg viewBox="0 0 240 200" role="img" aria-label="平阳红色地图">
+                  <rect x="0" y="0" width="240" height="200" rx="12" fill="#fdf7ee" />
+                  <path d="M18 96 C26 44 62 16 108 14 C152 12 200 30 218 66 C228 88 222 126 202 150 C176 182 124 192 86 182 C48 172 22 142 18 96 Z"
+                        fill="#f4e7d4" stroke="#d9b98d" stroke-width="2" />
+                  <path d="M40 150 C64 122 92 108 118 96 C146 82 170 70 196 52"
+                        fill="none" stroke="#c0272d" stroke-width="2.4" stroke-dasharray="7 5" opacity="0.75" />
+                  <text x="86" y="176" font-size="10" fill="#a9764a" font-family="sans-serif">红军古道 · 山门 → 凤卧</text>
+                  <g font-family="sans-serif" font-size="9.5" fill="#7a2018">
+                    <circle cx="54" cy="52" r="4.6" fill="#c0272d" />
+                    <text x="62" y="49">挺进师纪念碑</text>
+                    <circle cx="70" cy="84" r="4.6" fill="#c0272d" />
+                    <text x="78" y="81">北上抗日出征门</text>
+                    <circle cx="52" cy="120" r="4.6" fill="#c0272d" />
+                    <text x="60" y="117">抗日救亡干部学校</text>
+                    <circle cx="106" cy="112" r="4.6" fill="#c0272d" />
+                    <text x="114" y="109">林心平烈士陈列馆</text>
+                    <circle cx="188" cy="66" r="4.6" fill="#c0272d" />
+                    <text x="150" y="86">省一大冠尖会址</text>
+                  </g>
+                  <g transform="translate(206, 172)">
+                    <circle r="13" fill="#fff" stroke="#d9b98d" stroke-width="1.4" />
+                    <path d="M0 -9 L3 2 L0 0 L-3 2 Z" fill="#c0272d" />
+                    <text x="-3" y="11" font-size="7" fill="#a9764a" font-family="sans-serif">N</text>
+                  </g>
+                </svg>
+              </button>
+              <p class="w3d-start-tip">点击红色地图，开启红色遗址漫游</p>
+              <button class="w3d-btn primary w3d-start-btn" id="w3d-start-btn" type="button" hidden>开始浏览</button>
+            </div>
+          </div>
+
+          <div class="viewer3d-loading" id="v3d-loading">3D 模型加载中…</div>
+        </div>
+
+        <div class="viewer3d-tabs" id="v3d-tabs"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><span class="footer-brand">"浙"里在行动</span> · 平阳山门红色社会实践成果展示</p>
+      <p>© 2026 社会实践团队 版权所有</p>
+    </div>
+  </footer>
+
+  <script src="js/vendor/three.global.js"></script>
+  <script src="js/vendor/OrbitControls.global.js"></script>
+  <script src="js/buildings.js"></script>
+  <script src="js/explore.js"></script>
+
+  <script>
+    /* ==========================================================
+       红色地图 · 一园五馆（展示模式 + 漫游模式）
+       模型与公园布局见 js/buildings.js，漫游控制见 js/explore.js
+       两者与 three.js 均为普通脚本 + 全局 THREE，
+       因此直接双击打开、离线浏览也能正常运行。
+       ========================================================== */
+    const THREE = window.THREE;
+    const OrbitControls = THREE.OrbitControls;
+    const { BUILDINGS, buildPark, parkLayout, registry, PARK_EXTENT, PARK_TERRAIN_Y, SPAWN } = window.ParkBuildings;
+    const { CollisionWorld, Explorer } = window.ParkExplore;
+    const SKY = 0xa9c9e8;
+    const stage = document.getElementById('viewer3d');
+    const host = document.getElementById('scene3d');
+    const nameEl = document.getElementById('v3d-name');
+    const metaEl = document.getElementById('v3d-meta');
+    const descEl = document.getElementById('v3d-desc');
+    const noteEl = document.getElementById('v3d-note');
+    const tabsEl = document.getElementById('v3d-tabs');
+    const startEl = document.getElementById('w3d-start');
+    const startMap = document.getElementById('w3d-start-map');
+    const startBtn = document.getElementById('w3d-start-btn');
+    const startTip = startEl.querySelector('.w3d-start-tip');
+
+    /* ---------- 渲染器 / 场景 / 相机 / 光照 ---------- */
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    host.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(SKY);
+    scene.fog = new THREE.Fog(SKY, 130, 420);
+
+    const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 900);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.maxPolarAngle = Math.PI * 0.492;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.35;
+    controls.minDistance = 12;
+    controls.maxDistance = 340;
+    renderer.domElement.addEventListener('pointerdown', () => (controls.autoRotate = false));
+
+    scene.add(new THREE.HemisphereLight(0xd6e6ff, 0x8fa078, 0.9));
+    const sun = new THREE.DirectionalLight(0xfff1da, 2.1);
+    sun.position.set(64, 96, 46);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    Object.assign(sun.shadow.camera, { left: -96, right: 96, top: 96, bottom: -96, near: 10, far: 320 });
+    sun.shadow.bias = -0.0005;
+    scene.add(sun);
+
+    const root = new THREE.Group();
+    scene.add(root);
+
+    /* ---------- 一园五馆 ---------- */
+    const groups = buildPark(root);
+
+    /* ---------- 碰撞世界：几何自动生成，行走不穿模 ---------- */
+    const world = new CollisionWorld({ baseY: PARK_TERRAIN_Y, bounds: PARK_EXTENT });
+    BUILDINGS.forEach(b => world.addObject(groups[b.key], b.key));
+    world.finalize();
+
+    /* ---------- 展示模式：全园全景 + 单体聚焦 ---------- */
+    const OVERVIEW = {
+      key: 'overview', label: '全园全景',
+      cam: { pos: [0, 68, 132], target: [0, 4, 0], min: 26, max: 340 },
+      info: {
+        meta: '山门 · 凤卧 · 五处重点遗址同处一园',
+        desc: '以公园中心红五星广场为原点，五座建筑环向分布：北上抗日出征门、闽浙边抗日救亡干部学校旧址、中共浙江省一大冠尖会址、中国工农红军挺进师纪念碑、林心平烈士陈列馆。',
+        note: '点击「红色地图」可切换到漫游模式，以《人类一败涂地》风格的小人自由行走，走近遗址后按 F 查看详细介绍，按 E 切换全屏。'
+      }
+    };
+
+    const VIEWS = [OVERVIEW].concat(BUILDINGS.map(b => ({ key: b.key, label: b.label, building: b })));
+
+    function worldPoint(b, v) {
+      const t = parkLayout(b);
+      const s = Math.sin(t.yaw), c = Math.cos(t.yaw);
+      return new THREE.Vector3(t.x + v[0] * c + v[2] * s, v[1], t.z - v[0] * s + v[2] * c);
+    }
+
+    function focusView(view) {
+      const cam = view.building ? view.building.focus : view.cam;
+      const pos = view.building ? worldPoint(view.building, cam.pos) : new THREE.Vector3().fromArray(cam.pos);
+      const target = view.building ? worldPoint(view.building, cam.target) : new THREE.Vector3().fromArray(cam.target);
+      camera.position.copy(pos);
+      controls.target.copy(target);
+      controls.minDistance = cam.min;
+      controls.maxDistance = cam.max;
+      controls.autoRotate = true;
+      controls.update();
+
+      const info = view.building ? view.building.info : view.info;
+      nameEl.textContent = info.title;
+      metaEl.textContent = info.meta;
+      descEl.textContent = info.desc;
+      noteEl.textContent = info.note;
+      noteEl.classList.remove('show');
+      Array.prototype.forEach.call(tabsEl.children, el => el.classList.toggle('active', el.dataset.key === view.key));
+    }
+
+    VIEWS.forEach((view, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'viewer3d-tab' + (i === 0 ? ' active' : '');
+      btn.dataset.key = view.key;
+      btn.textContent = view.label;
+      btn.addEventListener('click', () => focusView(view));
+      tabsEl.appendChild(btn);
+    });
+
+    /* ---------- 漫游模式 ---------- */
+    const explorer = new Explorer({
+      scene: scene,
+      camera: camera,
+      renderer: renderer,
+      world: world,
+      buildings: BUILDINGS.map(b => Object.assign({}, b, parkLayout(b))),
+      spawn: SPAWN,
+      groundHint: PARK_TERRAIN_Y,
+      ui: {
+        fsTarget: stage,
+        crosshair: document.getElementById('w3d-crosshair'),
+        hint: document.getElementById('w3d-hint'),
+        info: document.getElementById('w3d-info'),
+        infoName: document.getElementById('w3d-info-name'),
+        infoMeta: document.getElementById('w3d-info-meta'),
+        infoDesc: document.getElementById('w3d-info-desc'),
+        infoNote: document.getElementById('w3d-info-note'),
+        infoClose: document.getElementById('w3d-info-close'),
+        map: document.getElementById('w3d-map'),
+        mapRadius: PARK_EXTENT * 0.52,
+        parkRadius: 48,
+        fs: document.getElementById('w3d-fs'),
+        pause: document.getElementById('w3d-pause'),
+        pauseResume: document.getElementById('w3d-resume'),
+        pauseExit: document.getElementById('w3d-exit')
+      }
+    });
+    explorer.onExit = () => leaveRoam();
+
+    function enterRoam() {
+      startEl.classList.add('hide');
+      stage.classList.add('roaming');
+      controls.enabled = false;
+      controls.autoRotate = false;
+      explorer.enter();
+    }
+
+    function leaveRoam() {
+      explorer.exit();
+      stage.classList.remove('roaming');
+      controls.enabled = true;
+      renderer.domElement.style.cursor = '';
+      startEl.classList.remove('hide');
+    }
+
+    // 点击红色地图 → 出现「开始浏览」
+    startMap.addEventListener('click', () => {
+      startEl.classList.add('armed');
+      startBtn.hidden = false;
+      startTip.textContent = '点击「开始浏览」，用 W A S D 走进这片红色土地';
+    });
+    startBtn.addEventListener('click', enterRoam);
+
+    /* ---------- 自适应尺寸 ---------- */
+    function resize() {
+      const w = host.clientWidth || 1, h = host.clientHeight || 1;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(host);
+    window.addEventListener('resize', resize);
+
+    /* ---------- 展示模式：点击碑前石碑查看简介 ---------- */
+    const raycaster = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    function hitStele(e, rect) {
+      ndc.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      return raycaster.intersectObjects(registry.pickables, true);
+    }
+    function buildingOf(obj) {
+      let n = obj;
+      while (n) {
+        if (n.userData && n.userData.buildingKey) return n.userData.buildingKey;
+        n = n.parent;
+      }
+      return null;
+    }
+    let downX = 0, downY = 0;
+    renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+    renderer.domElement.addEventListener('pointerup', e => {
+      if (explorer.active) return;
+      if (Math.hypot(e.clientX - downX, e.clientY - downY) > 5) return;   // 拖拽视角不算点击
+      const hits = hitStele(e, renderer.domElement.getBoundingClientRect());
+      if (!hits.length) return;
+      const key = buildingOf(hits[0].object);
+      const view = VIEWS.find(v => v.key === key);
+      if (view) focusView(view);
+      noteEl.classList.add('show');
+    });
+    renderer.domElement.addEventListener('pointermove', e => {
+      if (explorer.active) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      renderer.domElement.style.cursor = hitStele(e, rect).length ? 'pointer' : 'grab';
+    });
+
+    /* ---------- 主循环 ---------- */
+    const clock = new THREE.Clock();
+    renderer.setAnimationLoop(() => {
+      const dt = clock.getDelta();
+      const t = clock.elapsedTime;
+      for (let i = 0; i < registry.updateHooks.length; i++) registry.updateHooks[i](t);
+      if (explorer.active) {
+        explorer.update(dt);
+      } else {
+        controls.update();
+      }
+      renderer.render(scene, camera);
+    });
+
+    focusView(OVERVIEW);
+    resize();
+    const loadingEl = document.getElementById('v3d-loading');
+    if (loadingEl) loadingEl.remove();
+  </script>
+
+  <script>
+    // 3D 资源加载失败时的兜底提示
+    setTimeout(function () {
+      var el = document.getElementById('v3d-loading');
+      if (el) el.textContent = '3D 资源加载失败：请确认 js/ 目录与 resources.html 位于同一文件夹，然后刷新页面';
+    }, 9000);
+  </script>
+</body>
+</html>

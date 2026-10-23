@@ -523,8 +523,14 @@ class Explorer {
 
   _move(dt) {
     const k = this.keys;
-    const fwd = (k['w'] ? 1 : 0) - (k['s'] ? 1 : 0);
-    const side = (k['d'] ? 1 : 0) - (k['a'] ? 1 : 0);
+    let fwd = (k['w'] ? 1 : 0) - (k['s'] ? 1 : 0);
+    let side = (k['d'] ? 1 : 0) - (k['a'] ? 1 : 0);
+    // 移动端摇杆：-1..1 的模拟量，未设置时保持原有键盘行为
+    if (this.touchMove) {
+      fwd = -this.touchMove.y;
+      side = this.touchMove.x;
+    }
+    const inputMag = Math.min(1, Math.hypot(fwd, side));
     const speed = k['shift'] ? RUN_SPEED : WALK_SPEED;
 
     // 以视角方向为基准分解移动方向
@@ -536,7 +542,7 @@ class Explorer {
     if (len > 1e-4) { mx /= len; mz /= len; } else { mx = mz = 0; }
 
     // 加速 / 减速
-    const tvx = mx * speed, tvz = mz * speed;
+    const tvx = mx * speed * inputMag, tvz = mz * speed * inputMag;
     const rate = (len > 1e-4 ? ACCEL : BRAKE) * dt;
     const dvx = tvx - this.vel.x, dvz = tvz - this.vel.y;
     const dl = Math.hypot(dvx, dvz);

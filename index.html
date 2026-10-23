@@ -1,174 +1,56 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>首页 - "浙"里在行动 | 平阳山门红色社会实践</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="theme-color" content="#9A1D22" />
+  <title>"浙"里在行动 · 平阳山门红色社会实践</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+      background: linear-gradient(135deg, #5F1115 0%, #C0272D 55%, #9A1D22 100%);
+      color: #FBF3E7;
+    }
+    .entry { width: 100%; max-width: 420px; text-align: center; }
+    h1 { margin: 0 0 12px; font-size: 34px; line-height: 1.4; letter-spacing: 4px; }
+    p { margin: 0; font-size: 14px; line-height: 1.8; color: rgba(251, 243, 231, 0.82); }
+    .links { display: flex; gap: 12px; margin-top: 26px; }
+    .links a {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid rgba(246, 217, 143, 0.55);
+      border-radius: 8px;
+      color: #F6D98F;
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+    .links a.primary { background: #F6D98F; border-color: #F6D98F; color: #5F1115; font-weight: 700; }
+  </style>
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(ua) ||
+        window.matchMedia("(max-width: 820px)").matches;
+      window.location.replace(isMobile ? "mobile/index.html" : "desktop/index.html");
+    })();
+  </script>
 </head>
 <body>
-  <!-- ==================== 顶部导航 ==================== -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img class="brand-badge" src="images/team-badge.png" alt="团队团徽" />
-        <span class="brand-name">"浙"里在行动</span>
-      </a>
-
-      <nav class="main-nav">
-        <a href="resources.html">红色地图</a>
-        <a href="index.html" class="active">首页</a>
-        <a href="map3d.html">遗址分布</a>
-        <a href="achievements.html">革命历程</a>
-        <a href="about.html">关于</a>
-      </nav>
+  <main class="entry">
+    <h1>"浙"里在行动</h1>
+    <p>正在进入平阳山门红色社会实践成果展示</p>
+    <div class="links">
+      <a class="primary" href="desktop/index.html">电脑端</a>
+      <a href="mobile/index.html">移动端</a>
     </div>
-  </header>
-
-  <main>
-    <!-- 首页横幅 -->
-    <section class="hero">
-      <div class="container">
-        <p class="hero-tag">2026 年暑期社会实践</p>
-        <h1 class="hero-title">"浙"里在行动</h1>
-        <p class="hero-subtitle">走进平阳山门 · 追寻红色足迹 · 传承革命精神</p>
-      </div>
-    </section>
-
-    <!-- 栏目速览 -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">栏目速览</h2>
-        <div class="card-grid">
-          <a class="card" href="resources.html">
-            <h3 class="card-title">红色地图</h3>
-            <p class="card-text">沉浸式 3D 地图浏览革命遗址</p>
-          </a>
-          <a class="card" href="map3d.html">
-            <h3 class="card-title">遗址分布</h3>
-            <p class="card-text">查看平阳红色点位分布与重点纪念场馆</p>
-          </a>
-          <a class="card" href="achievements.html">
-            <h3 class="card-title">革命历程</h3>
-            <p class="card-text">重温烽火岁月中的重大事件与人物</p>
-          </a>
-          <a class="card" href="about.html">
-            <h3 class="card-title">关于我们</h3>
-            <p class="card-text">认识这支走进平阳山门的实践团队</p>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 实践概况 -->
-    <section class="section section-alt">
-      <div class="container">
-        <h2 class="section-title">实践概况</h2>
-        <div class="stat-grid">
-          <div class="stat-item"><b>红色文化，乡村振兴</b><span>实践主题</span></div>
-          <div class="stat-item"><b>2026.8.3-2026.8.10</b><span>实践时间</span></div>
-          <div class="stat-item"><b>浙江省温州市平阳县</b><span>实践地点</span></div>
-        </div>
-        <div class="placeholder-box">2026年是中国共产党成立105周年、红军长征胜利90周年。  中国地质大学（北京）“浙”里在行动实践团赴浙江省温州市平阳县开展暑期社会实践，走访中共浙江省一大纪念园、中国工农红军挺进师纪念园、林心平烈士陈列馆、红军古道及大屯村等地，通过实地参观、人物访谈、资料研读和影像记录等方式，追寻浙南革命足迹，感受革命老区发展变化，并探索以数字技术讲好红色故事的新路径。</div>
-      </div>
-    </section>
-
-    <!-- 实践成果速览 -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">实践成果速览</h2>
-        <div class="card-grid">
-          <a class="card" href="#media-social">
-            <h3 class="card-title">影像记录</h3>
-            <p class="card-text">视频集锦</p>
-          </a>
-          <a class="card" href="#media">
-            <h3 class="card-title">宣传成果</h3>
-            <p class="card-text">媒体报道（已整理 11 篇，点击查看）</p>
-          </a>
-        </div>
-      </div>
-    </section>
-    <!-- 影像记录 -->
-    <section class="section section-alt" id="media-social">
-      <div class="container">
-        <h2 class="section-title">影像记录</h2>
-        <div class="card-grid">
-          <article class="card">
-            <img class="card-img" src="images/3.png" alt="抖音二维码" />
-            <h3 class="card-title">抖音</h3>
-          </article>
-          <article class="card">
-            <img class="card-img" src="images/4.png" alt="小红书二维码" />
-            <h3 class="card-title">小红书</h3>
-          </article>
-          <article class="card">
-            <img class="card-img" src="images/1.png" alt="视频号二维码" />
-            <h3 class="card-title">视频号</h3>
-          </article>
-        </div>
-      </div>
-    </section>
-    <!-- 媒体报道 -->
-    <section class="section" id="media">
-      <div class="container">
-        <h2 class="section-title">媒体报道</h2>
-        <div class="route-list">
-          <a class="route-item" href="http://www.jicengwang.cn/tt/2026-08-16/296802.html" target="_blank" rel="noopener">
-            <span class="route-tag">基层网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.sohu.com/a/1063619863_120112238" target="_blank" rel="noopener">
-            <span class="route-tag">搜狐网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.sanxiaxiang.com/sxxhd/26803.html" target="_blank" rel="noopener">
-            <span class="route-tag">三下乡网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://life.china.com/2026-08/17/content_618117.html" target="_blank" rel="noopener">
-            <span class="route-tag">中华网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.dcdxsw.com/shsj/shsjnr/138088.html" target="_blank" rel="noopener">
-            <span class="route-tag">大学生云报</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.toutiao.com/article/7674894687764873770/" target="_blank" rel="noopener">
-            <span class="route-tag">今日头条</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.chinajy.org.cn/article/8727.html" target="_blank" rel="noopener">
-            <span class="route-tag">中国教育网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.shijianpu.com/shsjhd/14762.html" target="_blank" rel="noopener">
-            <span class="route-tag">社会实践网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="http://www.cfgw.net.cn/2026-08/18/content_25219465.html" target="_blank" rel="noopener">
-            <span class="route-tag">改革网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="https://www.cnpiw.cn/a/fuwuzhongxin/hezuo/20260818/44434.html?1787045337" target="_blank" rel="noopener">
-            <span class="route-tag">报业网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-          <a class="route-item" href="http://www.chinareports.org.cn/index/news/116778.html" target="_blank" rel="noopener">
-            <span class="route-tag">中国报道网</span>
-            <p class="route-name">寻红记——地大青年走读平阳红色足迹</p>
-          </a>
-        </div>
-      </div>
-    </section>
   </main>
-
-  <!-- ==================== 页脚 ==================== -->
-  <footer class="site-footer">
-    <div class="container">
-      <p><span class="footer-brand">"浙"里在行动</span> · 平阳山门红色社会实践成果展示</p>
-      <p>© 2026 社会实践团队 版权所有</p>
-    </div>
-  </footer>
 </body>
 </html>
